@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#111827">
+    <meta name="description" content="Generate strong, private passwords with PASSGEN.">
+    <title>PASSGEN — Secure Password Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="expiry-reminder.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="#" aria-label="PASSGEN home">
+            <span class="brand-mark" aria-hidden="true">P</span>
+            <span>PASS<span class="brand-accent">GEN</span></span>
+        </a>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode">
+            <span id="themeIcon" aria-hidden="true">☾</span>
+            <span id="themeLabel">Dark mode</span>
+        </button>
+    </header>
+
+    <main class="page-shell">
+        <section class="intro" aria-labelledby="pageTitle">
+            <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> PRIVATE BY DESIGN</p>
+            <h1 id="pageTitle">Passwords that work <span>for you.</span></h1>
+            <p class="intro-copy">Create strong, unique passwords in seconds. Everything happens in your browser—your passwords are never uploaded.</p>
+        </section>
+
+        <section class="panel generator-panel" aria-labelledby="generatorTitle">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">CUSTOMIZE</p>
+                    <h2 id="generatorTitle">Build your password</h2>
+                </div>
+                <span class="private-badge"><span aria-hidden="true">◈</span> Local only</span>
+            </div>
+
+            <div class="length-control">
+                <div class="control-heading">
+                    <label for="lengthRange">Password length</label>
+                    <output id="lengthValue" for="lengthRange">16</output>
+                </div>
+                <input id="lengthRange" type="range" min="8" max="64" value="16">
+                <div class="range-labels"><span>8 characters</span><span>64 characters</span></div>
+            </div>
+
+            <fieldset class="character-options">
+                <legend>Include characters</legend>
+                <label class="option-card" for="uppercase">
+                    <input id="uppercase" type="checkbox" checked>
+                    <span class="checkmark" aria-hidden="true"></span>
+                    <span class="option-copy"><strong>Uppercase</strong><small>A–Z</small></span>
+                </label>
+                <label class="option-card" for="lowercase">
+                    <input id="lowercase" type="checkbox" checked>
+                    <span class="checkmark" aria-hidden="true"></span>
+                    <span class="option-copy"><strong>Lowercase</strong><small>a–z</small></span>
+                </label>
+                <label class="option-card" for="numbers">
+                    <input id="numbers" type="checkbox" checked>
+                    <span class="checkmark" aria-hidden="true"></span>
+                    <span class="option-copy"><strong>Numbers</strong><small>0–9</small></span>
+                </label>
+                <label class="option-card" for="symbols">
+                    <input id="symbols" type="checkbox" checked>
+                    <span class="checkmark" aria-hidden="true"></span>
+                    <span class="option-copy"><strong>Symbols</strong><small>!@#$…</small></span>
+                </label>
+            </fieldset>
+
+            <div class="generate-row">
+                <label class="count-control" for="passwordCount">
+                    <span>Generate</span>
+                    <select id="passwordCount">
+                        <option value="1">1 password</option>
+                        <option value="5">5 passwords</option>
+                        <option value="10">10 passwords</option>
+                    </select>
+                </label>
+                <button class="button button-primary generate-button" id="generateButton" type="button">
+                    <span aria-hidden="true">✦</span> Generate password
+                </button>
+            </div>
+            <p class="message" id="generatorStatus" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="panel results-panel" id="resultsSection" aria-labelledby="resultsTitle" hidden>
+            <div class="section-heading results-heading">
+                <div>
+                    <p class="eyebrow">READY TO USE</p>
+                    <h2 id="resultsTitle">Your passwords</h2>
+                </div>
+                <span class="result-count" id="resultCount"></span>
+            </div>
+            <div class="password-list" id="passwordResults"></div>
+        </section>
+
+        <section class="panel qr-panel" id="qrSection" aria-labelledby="qrTitle" hidden>
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">GENERATED ON THIS DEVICE</p>
+                    <h2 id="qrTitle">Password QR code</h2>
+                </div>
+                <button class="icon-button" id="closeQr" type="button" aria-label="Close QR code">×</button>
+            </div>
+            <div class="qr-content">
+                <canvas id="qrCanvas" width="328" height="328" aria-label="QR code for the selected password"></canvas>
+                <p>Scan to transfer this password to another device. Anyone who scans it can see the password.</p>
+            </div>
+            <p class="message" id="qrStatus" role="status" aria-live="polite"></p>
+        </section>
+
+        <div class="lower-grid">
+            <section class="panel history-panel" aria-labelledby="historyTitle">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">THIS SESSION ONLY</p>
+                        <h2 id="historyTitle">Password history</h2>
+                    </div>
+                    <span class="history-count" id="historyCount">0</span>
+                </div>
+                <p class="section-description">Recent passwords stay in memory while this page is open. They are never saved to storage or sent anywhere.</p>
+                <ul class="history-list" id="historyList"></ul>
+                <p class="empty-state" id="historyEmpty">Your generated passwords will appear here.</p>
+            </section>
+
+            <aside class="panel tips-panel" aria-labelledby="tipsTitle">
+                <p class="eyebrow">STAY A STEP AHEAD</p>
+                <h2 id="tipsTitle">Password security tips</h2>
+                <ul class="tips-list">
+                    <li><span class="tip-icon" aria-hidden="true">✓</span><span><strong>Go long.</strong> Aim for 16 characters or more when a site allows it.</span></li>
+                    <li><span class="tip-icon" aria-hidden="true">✓</span><span><strong>Make every password unique.</strong> Never reuse one across accounts.</span></li>
+                    <li><span class="tip-icon" aria-hidden="true">✓</span><span><strong>Use a password manager.</strong> Store passwords in a trusted, encrypted vault.</span></li>
+                    <li><span class="tip-icon" aria-hidden="true">✓</span><span><strong>Turn on multi-factor authentication.</strong> Add another layer of account protection.</span></li>
+                    <li><span class="tip-icon" aria-hidden="true">✓</span><span><strong>Keep passwords private.</strong> Avoid sharing them or leaving them visible.</span></li>
+                </ul>
+            </aside>
+        </div>
+
+        <footer class="site-footer">
+            <span>PASSGEN <span aria-hidden="true">·</span> Secure by design</span>
+            <span><span class="footer-lock" aria-hidden="true">▣</span> Passwords stay on your device</span>
+        </footer>
+    </main>
+</body>
+</html>
