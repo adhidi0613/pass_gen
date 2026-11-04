@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="expiry-reminder.css">
     <script src="script.js" defer></script>
+    <script src="expiry-reminder.js" defer></script>
 </head>
 <body>
     <header class="site-header">
@@ -139,6 +140,40 @@
                 </ul>
             </aside>
         </div>
+
+        <section class="panel expiry-panel" id="expirySection" aria-labelledby="expiryTitle">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">ON THIS DEVICE ONLY</p>
+                    <h2 id="expiryTitle">Password review reminders</h2>
+                </div>
+                <span class="private-badge"><span aria-hidden="true">◈</span> No passwords saved</span>
+            </div>
+            <p class="section-description">Choose an account and review date. Only the account label and date are saved in this browser.</p>
+            <form class="expiry-form" id="expiryForm">
+                <div class="expiry-field">
+                    <label for="accountLabel">Website or account name</label>
+                    <input id="accountLabel" name="accountLabel" type="text" maxlength="60"
+                        placeholder="Example: Email account" autocomplete="off" required>
+                </div>
+                <div class="expiry-field">
+                    <label for="expiryDate">Review date</label>
+                    <input id="expiryDate" name="expiryDate" type="date" required>
+                </div>
+                <button class="button button-primary expiry-submit" type="submit">Add reminder</button>
+            </form>
+            <p class="message" id="expiryStatus" role="status" aria-live="polite"></p>
+
+            <div class="expiry-list-wrap">
+                <div class="expiry-list-heading">
+                    <h3>Your reminders</h3>
+                    <button class="small-button" type="button" id="enableNotifications">Enable notifications</button>
+                </div>
+                <ul class="expiry-list" id="expiryList"></ul>
+                <p class="empty-state" id="expiryEmpty">No reminders yet. Add one to plan your next password review.</p>
+            </div>
+            <p class="expiry-note">Notifications are optional and are checked while this page is open. Avoid putting passwords or other secrets in account names.</p>
+        </section>
 
         <footer class="site-footer">
             <span>PASSGEN <span aria-hidden="true">·</span> Secure by design</span>
